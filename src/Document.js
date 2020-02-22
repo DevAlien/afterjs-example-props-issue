@@ -16,11 +16,12 @@ class Document extends React.Component {
         <App {...props} />
       </Provider>
     ));
-    return { ...page, data: { isMobile: true } };
+    const additionalData =  { isMobile: true }
+    return { ...page, additionalData };
   }
 
   render() {
-    const { helmet } = this.props;
+    const { helmet, additionalData } = this.props;
     // get attributes from React Helmet
     const htmlAttrs = helmet.htmlAttributes.toComponent();
     const bodyAttrs = helmet.bodyAttributes.toComponent();
@@ -42,6 +43,13 @@ class Document extends React.Component {
           <AfterData />
           <ReduxData />
           <AfterScripts />
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `window.__ADDITIONAL_DATA__ = ${serialize(
+                additionalData
+              )}`
+            }}
+          />
         </body>
       </html>
     );
